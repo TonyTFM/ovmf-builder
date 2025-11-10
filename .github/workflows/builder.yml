@@ -1,0 +1,54 @@
+name: Build OVMF + Windows11 QCOW2
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1️⃣ Checkout von TianoCore edk2
+    - name: Checkout edk2
+      uses: actions/checkout@v4
+      with:
+        repository: tianocore/edk2
+        submodules: true
+
+    # 2️⃣ Install dependencies
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y build-essential uuid-dev iasl git nasm python3-distutils python3-pip qemu-utils wget
+
+    # 3️⃣ Build BaseTools
+    - name: Build BaseTools
+      run: make -C BaseTools
+
+    # 4️⃣ Setup EDK2 environment
+    - name: Setup EDK2
+      run: . edksetup.sh BaseTools
+
+    # 5️⃣ Build OVMF Release
+    - name: Build OVMF
+      run: |
+        build -a X64 -t GCC5 -p OvmfPkg/OvmfPkgX64.dsc -b RELEASE -D SECURE_BOOT_ENABLE -D SMM_REQUIRE
+
+    # 6️⃣ Combine CODE + VARS
+    - name: Combine OVMF firmware
+      run: |
+        mkdir -p output
+        cat Build/OvmfX64/RELEASE_GCC5/FV/OVMF_CODE.fd Build/OvmfX64/RELEASE_GCC5/FV/OVMF_VARS.fd > output/OVMF.fd
+
+    # 7️⃣ Download external Windows11 QCOW2
+    - name: Download Windows11 QCOW2
+      run: |
+        mkdir -p output/qcow2
+        wget -O output/qcow2/Windows11_fixed.qcow2 "DEIN-DIREKTLINK-ZUR-QCOW2"
+
+    # 8️⃣ Upload ZIP artifact
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: OVMF_QCOW2
+        path: output/
