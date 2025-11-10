@@ -1,0 +1,50 @@
+# OVMF + Custom OS Builder 🚀
+
+**Build & Ready-to-Use Cloud Workflow für UEFI-Firmware mit deinem OS + Tools**
+
+---
+
+## 🔹 Übersicht
+
+Dieses Projekt liefert **fertige OVMF-Binaries** kombiniert mit **deinem OS-ROM/QCOW2** und optionalen **Tools**, sofort nutzbar in QEMU, VirtualBox oder UTM.
+
+- Kein lokales Build nötig  
+- Keine großen Dateien im Repository  
+- Alles läuft über **GitHub Actions**  
+
+---
+
+## 🔹 Features
+
+- **OVMF.fd**: Release Build, Secure Boot aktiviert  
+- **CustomOS.qcow2**: Vorbereitetes OS-Image  
+- **Tools/Skripte**: Optional integriert  
+- **Artifact ZIP**: Download direkt aus Actions  
+
+---
+
+## 🔹 So benutzt du es
+
+1. Forke das Repository: `ovmf-qcow2-builder`  
+2. Gehe auf **Actions → Build OVMF + Custom OS → Run workflow**  
+3. Nach wenigen Minuten: Download ZIP aus **Artifacts → OVMF_CustomOS.zip**  
+4. Enthalten:  
+   - `OVMF.fd`  
+   - `CustomOS.qcow2`  
+   - Optional: `tools/`  
+
+---
+
+## 🔹 Privatsphäre
+
+- Dein Gerät/System bleibt **unsichtbar**  
+- Workflow läuft auf **GitHub Runnern**  
+- Artefakte enthalten nur **OVMF + OS + Tools**, keine privaten Daten  
+
+---
+
+## 🔹 Community & Sharing
+
+- Artefakte sind **direkt nutzbar**  
+- Workflow kann geteilt werden  
+- Jeder bekommt **„was er verdient“**: fertige, getestete VM + Tools
