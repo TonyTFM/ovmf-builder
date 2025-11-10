@@ -1,0 +1,66 @@
+# OVMF + Windows11 QCOW2 Builder 🚀
+
+**Build & Ready-to-Use Cloud Workflow für UEFI-Firmware mit Windows11 VM**
+
+---
+
+## 🔹 Übersicht
+
+Dieses Projekt liefert **fertige OVMF UEFI-Binaries** kombiniert mit einem **Windows11 QCOW2-Image**, sofort nutzbar in **QEMU, VirtualBox oder UTM**.  
+
+- Kein lokales Build nötig  
+- Kein Upload großer Dateien ins Repository  
+- Alles läuft sauber über **GitHub Actions** in der Cloud  
+
+---
+
+## 🔹 Features
+
+- **OVMF.fd**: Release Build, Secure Boot aktiviert  
+- **Windows11_fixed.qcow2**: Vorbereitetes Image, startklar  
+- **Artifact ZIP**: Enthält alles, Download direkt aus Actions  
+- **Workflow flexibel**: Einfaches Forken und Run Workflow  
+
+---
+
+## 🔹 Vorteile für die Community
+
+1. **Schnell & unkompliziert**: Fertiges VM-Setup ohne Installation  
+2. **Sicher & privat**: Keine Infos über dein Gerät oder dein System nötig  
+3. **Erweiterbar**: Debug / Secure Varianten, EFI Shell, Tools  
+4. **Professionell**: Sauberes, versioniertes GitHub-Projekt  
+
+---
+
+## 🔹 So benutzt du es
+
+1. Forke das Repository: `ovmf-qcow2-builder`  
+2. Gehe auf **Actions → Build OVMF + Windows11 QCOW2 → Run workflow**  
+3. Nach 3–5 Minuten: Download ZIP aus **Artifacts → OVMF_QCOW2.zip**  
+4. Enthalten:  
+   - `OVMF.fd`  
+   - `Windows11_fixed.qcow2`  
+
+---
+
+## 🔹 Optional: Erweiterungen
+
+- Debug Builds (`OVMF_DEBUG.fd`)  
+- Secure Boot Varianten (`OVMF_SECURE.fd`)  
+- EFI Shell / kleine Tools ins QCOW2 integrieren  
+- Community Challenges & Tutorials  
+
+---
+
+## 🔹 Hinweis zur Privatsphäre
+
+- Dein Gerät / System wird **nicht im Repo oder Workflow sichtbar**  
+- Alles läuft auf **GitHub Runnern (Ubuntu x86_64)**  
+- Artefakte enthalten **nur OVMF + QCOW2**, keine persönlichen Daten  
+
+---
+
+## 🔹 Kontakt / Support
+
+Bei Fragen oder Ideen: öffne ein Issue oder diskutiert im Repository.  
+Wir freuen uns auf Feedback und coole Experimente mit OVMF + Windows11!
