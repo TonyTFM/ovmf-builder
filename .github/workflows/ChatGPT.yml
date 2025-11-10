@@ -1,0 +1,59 @@
+name: Build OVMF + Custom OS + Tools
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      QCOW2_URL: ${{ secrets.QCOW2_URL }}
+
+    steps:
+    - name: Checkout edk2
+      uses: actions/checkout@v4
+      with:
+        repository: tianocore/edk2
+        submodules: true
+
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y build-essential uuid-dev iasl git nasm python3-distutils python3-pip qemu-utils wget
+
+    - name: Build BaseTools
+      run: make -C BaseTools
+
+    - name: Setup EDK2 environment
+      run: . edksetup.sh BaseTools
+
+    - name: Build OVMF Release
+      run: |
+        build -a X64 -t GCC5 -p OvmfPkg/OvmfPkgX64.dsc -b RELEASE -D SECURE_BOOT_ENABLE -D SMM_REQUIRE
+
+    - name: Combine CODE + VARS
+      run: |
+        mkdir -p output
+        cat Build/OvmfX64/RELEASE_GCC5/FV/OVMF_CODE.fd Build/OvmfX64/RELEASE_GCC5/FV/OVMF_VARS.fd > output/OVMF.fd
+
+    - name: Download Custom OS-ROM (from secret URL)
+      run: |
+        mkdir -p output/qcow2
+        if [ -z "${QCOW2_URL}" ]; then
+          echo "QCOW2_URL not set! Please set repository secret QCOW2_URL." >&2
+          exit 1
+        fi
+        wget -O output/qcow2/CustomOS.qcow2 "${QCOW2_URL}"
+
+    - name: Add custom tools
+      run: |
+        mkdir -p output/tools
+        if [ -d scripts ]; then
+          cp -r scripts/* output/tools/ || true
+        fi
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: OVMF_CustomOS
+        path: output/
