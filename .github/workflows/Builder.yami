@@ -1,0 +1,40 @@
+name: Build OVMF + Custom OS + Tools
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout edk2
+      uses: actions/checkout@v4
+      with:
+        repository: tianocore/edk2
+        submodules: true
+
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y build-essential uuid-dev iasl git nasm python3-distutils python3-pip qemu-utils wget
+
+    - name: Build BaseTools
+      run: make -C BaseTools
+
+    - name: Setup EDK2 environment
+      run: . edksetup.sh BaseTools
+
+    - name: Build OVMF Release
+      run: |
+        build -a X64 -t GCC5 -p OvmfPkg/OvmfPkgX64.dsc -b RELEASE -D SECURE_BOOT_ENABLE -D SMM_REQUIRE
+
+    - name: Combine CODE + VARS
+      run: |
+        mkdir -p output
+        cat Build/OvmfX64/RELEASE_GCC5/FV/OVMF_CODE.fd Build/OvmfX64/RELEASE_GCC5/FV/OVMF_VARS.fd > output/OVMF.fd
+
+    - name: Download Custom OS-ROM
+      run: |
+        mkdir -p output/qcow2
+        wget -O output/qcow2/CustomOS.qcow2 "DEIN-DIREKTLINK-ZUR
